@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Syntax Highlighter for Word – K26</title>
+  <title>Syntax Highlighter for Word</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <meta name="description" content="Highlight code and paste it into Word with colours intact."/>
+  <meta name="description" content="Paste code, choose language, copy as RTF → paste into Word with colours intact."/>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300"/>
+  <!-- Google font + existing stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/syntaxhighlighter.css"/>
   <link rel="stylesheet" href="index.css"/>
 </head>
@@ -16,16 +16,19 @@
   <header>
     <h1>Syntax Highlighter</h1>
     <p>
-      Paste your code, choose a language, click <em>Copy Highlighted</em>, then paste into Word.
+      Paste your code, pick the language, click <strong>Copy Highlighted</strong>, then paste into Word
+      with full colours, fonts and line numbers.
     </p>
   </header>
 
   <div class="main-wrapper">
     <main>
+      <!-- INPUT -->
       <div id="input">
         <textarea placeholder="// paste your code here"></textarea>
       </div>
 
+      <!-- CONTROLS -->
       <div id="selection">
         <select id="lang">
           <option value="applescript">AppleScript</option>
@@ -45,16 +48,15 @@
           <option value="xml">XML</option>
         </select>
 
-        <button id="copyBtn" class="cta">
-          <span>Copy Highlighted</span>
-        </button>
+        <button id="copyBtn" class="cta">Copy Highlighted</button>
       </div>
 
+      <!-- OUTPUT -->
       <div id="output"></div>
     </main>
   </div>
 
-  <!-- Scripts (order matters) -->
+  <!-- Scripts in the correct order -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script src="assets/syntaxhighlighter.js"></script>
   <script type="module" src="index.js"></script>
