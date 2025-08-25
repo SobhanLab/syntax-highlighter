@@ -1,69 +1,36 @@
-import SyntaxHighlighter from "./assets/syntaxhighlighter.js";
-
-let highlighter = SyntaxHighlighter;
-
-// Function to highlight code
+// index.js  —  ES-module
 function highlight() {
-  let lang = $("#select").val();
-  let input = $("#input textarea").val();
+  const lang = $('#lang').val();
+  const code = $('#input textarea').val();
 
-  console.log("Language: " + lang + "\nInput: " + input);
+  $('#output')
+    .empty()
+    .html(`<pre class="brush: ${lang}; toolbar:false;">${code}</pre>`);
 
-  $("#result").html(`
-    <pre class="brush: ${lang}">${input}</pre>
-  `);
+  // run highlighter
+  SyntaxHighlighter.highlight({}, $('#output pre')[0]);
 
-  highlighter();
-
-  // Save selected language in cookie
-  document.cookie = "lang=" + lang + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+  // remember language
+  document.cookie = `lang=${lang}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
 }
 
-// Copy highlighted code to clipboard
-$("#copy").click(function () {
-  const codeElement = $("#result .syntaxhighlighter")[0];
-  if (!codeElement) return; // nothing to copy
-
-  const textToCopy = codeElement.innerText;
-
-  navigator.clipboard.writeText(textToCopy)
-    .then(() => {
-      alert("Code copied to clipboard!");
-    })
-    .catch((err) => {
-      console.error("Failed to copy: ", err);
-    });
-});
-
-// Highlight on textarea input
-$("#input textarea").on("change keyup paste", function () {
-  highlight();
-});
-
-// Highlight on language selection change
-$("#select").change(function () {
-  highlight();
-});
-
-// Helper function to get cookie value
-function getCookie(name) {
-  const cookies = document.cookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-    if (cookie.startsWith(name + "=")) {
-      return cookie.substring(name.length + 1);
-    }
-  }
-  return null;
+function loadLang() {
+  const m = document.cookie.match(/(?:^|; )lang=([^;]*)/);
+  if (m) $('#lang').val(decodeURIComponent(m[1]));
 }
 
-// Restore selected language from cookie
-$(document).ready(function () {
-  const storedLang = getCookie("lang");
-  if (storedLang) {
-    $("#select").val(storedLang);
-  }
+$(() => {
+  loadLang();
+  highlight();                 // initial render
+  $('#input textarea, #lang').on('input change', highlight);
 
-  // Initial highlight
-  highlight();
+  $('#copyBtn').on('click', () => {
+    const range = document.createRange();
+    range.selectNodeContents($('#output .syntaxhighlighter')[0]);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+  });
 });
